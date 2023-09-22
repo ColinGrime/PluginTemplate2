@@ -1,0 +1,43 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.10'
+}
+
+java {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+}
+
+group '${PACKAGE}'
+version '1.0.0-alpha'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compileOnly 'org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT'
+
+    // Extra:
+    compileOnly 'com.github.ColinGrime:Midnight:${MIDNIGHT_VERSION}'
+
+    // Testing:
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testImplementation 'org.mockito:mockito-core:5.3.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.5.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+processResources {
+    filter ReplaceTokens, beginToken: '${', endToken: '}', tokens: ['version': version]
+}
